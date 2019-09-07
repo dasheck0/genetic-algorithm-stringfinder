@@ -1,8 +1,8 @@
 generations:
-  max: 1000
+  max: 100000
 population:
   size: 250
-  limit: 80
+  limit: 100
 fitness:
   algorithm: 'sumDifference'
 mating:

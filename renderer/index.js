@@ -5,5 +5,6 @@
 
 module.exports = {
     console: require('./consoleRenderer'),
-    json: require('./jsonRenderer')
+    json: require('./jsonRenderer'),
+    chart: require('./chartRenderer')
 };

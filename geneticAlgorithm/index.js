@@ -16,11 +16,18 @@ class GeneticAlgorithm {
         };
 
         for (let i = 0; i < runLimit; i += 1) {
+            result.generationCount = i;
+
             if (verbose.length >= 1) {
                 console.log(`Generation: ${i}`);
             }
             const testedPopulation = GeneticAlgorithm.testPopulation(currentGeneration, destinationWord, fitnessFunction);
             result.generations.push(testedPopulation);
+
+            if (currentGeneration.some((chromosome) => chromosome === destinationWord)) {
+                result.lastGeneration = currentGeneration;
+                break;
+            }
 
             if (verbose.length >= 2) {
                 console.log(`Population: ${testedPopulation}`);
@@ -28,12 +35,6 @@ class GeneticAlgorithm {
 
             currentGeneration = GeneticAlgorithm.mate(testedPopulation.map(p => p.chromosome), bestPopuplationLimit, matingFunction, crossoverFunction);
             currentGeneration = currentGeneration.map(chromosome => mutationFunction.call(null, chromosome, mutationChance, characterSet));
-
-            result.generationCount = i;
-            if (currentGeneration.some((chromosome) => chromosome === destinationWord)) {
-                result.lastGeneration = currentGeneration;
-                break;
-            }
         }
 
         return result;
