@@ -16,11 +16,13 @@ const crossoverFunctions = require('./geneticAlgorithm/crossovers');
 const matingFunctions = require('./geneticAlgorithm/matings');
 const mutationFunctions = require('./geneticAlgorithm/mutations');
 const utilities = require('./utilities');
+const renderer = require('./renderer');
 
 const optionDefinitions = [
     { name: 'profile', alias: 'p', type: String },
     { name: 'word', alias: 'w', type: String, defaultOption: true },
-    { name: 'verbose', alias: 'v', type: Boolean, lazyMultiple: true }
+    { name: 'verbose', alias: 'v', type: Boolean, lazyMultiple: true },
+    { name: 'output', alias: 'o', type: String, lazyMultiple: true }
 ];
 const options = commandLineArgs(optionDefinitions);
 
@@ -69,4 +71,14 @@ const result = geneticAlgorithm.run(
     options.verbose.filter(entry => !!entry)
 );
 
-fs.writeFileSync('logs.json', JSON.stringify(result, null, 2));
+if (options.output) {
+    options.output.forEach((output) => {
+        if (renderer[output]) {
+            renderer[output].render(result, { profile: profileName, now: (new Date()).getTime() });
+        } else {
+            console.warn(`Output '${output}' is currently not supported`);
+        }
+    });
+} else {
+    renderer.console.render(result);
+}
