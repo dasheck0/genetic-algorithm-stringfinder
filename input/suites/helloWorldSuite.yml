@@ -1,7 +1,13 @@
-word: 'Hello World'
+word: 'Hello World! Somewhat longer'
+overrides:
+  generations:
+    max: 2000
 profiles:
   - default
+  - highMutation
   - highPopulation
+  - superHighPopulation
+  - lowPopulation
+  - zeroMutation
 output:
-  - json
   - chart

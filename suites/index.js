@@ -6,6 +6,7 @@
 const YAML = require('yamljs');
 const fs = require('fs');
 const path = require('path');
+const mkdirp = require('mkdirp');
 
 const { validateProfile, validateSuite } = require('../validation');
 const geneticAlgorithm = require('../geneticAlgorithm');
@@ -15,6 +16,8 @@ const matingFunctions = require('../geneticAlgorithm/matings');
 const mutationFunctions = require('../geneticAlgorithm/mutations');
 const utilities = require('../utilities');
 const renderer = require('../renderer');
+const fileBaseRenderer = require('../renderer/fileBaseRenderer');
+
 
 class Suite {
     static runSuite(suiteName, options = {}) {
@@ -32,15 +35,24 @@ class Suite {
             return;
         }
 
-        const now = (new Date()).getTime();
-        suite.profiles.forEach((profile) => {
-            Suite.runProfile(suite.word, profile, {
-                output: suite.output,
-                verbose: options.verbose,
-                now,
-                suiteName
-            })
-        })
+        const suiteOptions = {
+            output: suite.output,
+            verbose: options.verbose,
+            now: (new Date()).getTime(),
+            suiteName,
+            overrides: suite.overrides || {}
+        };
+
+        const results = suite.profiles.map((profile) => Suite.runProfile(suite.word, profile, suiteOptions));
+
+        const outputPath = fileBaseRenderer.getOutputPath(suiteOptions);
+        mkdirp.sync(outputPath);
+        fs.writeFileSync(path.join(outputPath, 'report.json'), JSON.stringify({
+            results: results.sort((a, b) => a.generationCount - b.generationCount).map(result => ({
+                name: result.profileName,
+                generations: result.generationCount
+            }))
+        }, null, 2));
     }
 
     static runProfile(word, profileName = 'default', options = {}) {
@@ -74,7 +86,7 @@ class Suite {
             Suite.findStaticFunction(matingFunctions, profile.mating.algorithm),
             Suite.findStaticFunction(crossoverFunctions, profile.crossover.algorithm),
             Suite.findStaticFunction(mutationFunctions, profile.mutation.algorithm),
-            profile.generations.max,
+            (options.overrides.generations || {}).max || profile.generations.max,
             options.verbose.filter(entry => !!entry)
         );
 
@@ -94,6 +106,10 @@ class Suite {
         } else {
             renderer.console.render(result);
         }
+
+        result.word = word;
+        result.profileName = profileName;
+        return result;
     }
 
     /* private */

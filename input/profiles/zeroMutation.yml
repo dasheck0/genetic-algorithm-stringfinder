@@ -1,0 +1,14 @@
+generations:
+  max: 10000
+population:
+  size: 100
+  limit: 60
+fitness:
+  algorithm: 'sumDifference'
+mating:
+  algorithm: 'randomPick'
+crossover:
+  algorithm: 'singlePointMiddle'
+mutation:
+  chance: 0.001
+  algorithm: 'singleCharacter'
