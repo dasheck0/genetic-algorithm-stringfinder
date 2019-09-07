@@ -32,10 +32,13 @@ class Suite {
             return;
         }
 
+        const now = (new Date()).getTime();
         suite.profiles.forEach((profile) => {
             Suite.runProfile(suite.word, profile, {
                 output: suite.output,
-                verbose: options.verbose
+                verbose: options.verbose,
+                now,
+                suiteName
             })
         })
     }
@@ -76,9 +79,14 @@ class Suite {
         );
 
         if (options.output) {
+            const now = (new Date()).getTime();
             options.output.forEach((output) => {
                 if (renderer[output]) {
-                    renderer[output].render(result, { profile: profileName, now: (new Date()).getTime() });
+                    renderer[output].render(result, {
+                        profileName,
+                        now: options.now || now,
+                        suiteName: options.suiteName
+                    });
                 } else {
                     console.warn(`Output '${output}' is currently not supported`);
                 }

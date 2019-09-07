@@ -7,9 +7,13 @@ const ChartjsNode = require('chartjs-node');
 const mkdirp = require('mkdirp');
 const path = require('path');
 
+const base = require('./fileBaseRenderer');
+
 class ChartRenderer {
     static async render(input, data = {}) {
-        mkdirp.sync(path.join(process.cwd(), 'output', data.profile));
+        const outputPath = base.getOutputPath(data);
+        mkdirp.sync(outputPath);
+
         const chartNode = new ChartjsNode(2048, 768);
 
         return chartNode.drawChart({
@@ -75,7 +79,7 @@ class ChartRenderer {
         })
             .then(() => chartNode.getImageBuffer('image/png'))
             .then(() => chartNode.getImageStream('image/png'))
-            .then(() => chartNode.writeImageToFile('image/png', path.join(process.cwd(), 'output', data.profile, `${data.now}.png`)));
+            .then(() => chartNode.writeImageToFile('image/png', path.join(outputPath, `${base.getOutputFilename(data)}.png`)));
     }
 }
 
