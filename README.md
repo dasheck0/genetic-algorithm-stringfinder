@@ -26,16 +26,16 @@ population and the cycle starts again until we get a population with our given s
 
 ## Results
 ### Default
-Population size: 100
-Limited number of population used for mating: 60
-Mutation chance : 5%
+* Population size: 100
+* Limited number of population used for mating: 60
+* Mutation chance : 5%
 
 ![](./art/default.png)
 
 ### High Mutation
-Population size: 100
-Limited number of population used for mating: 60
-Mutation chance : 15%
+* Population size: 100
+* Limited number of population used for mating: 60
+* Mutation chance : 15%
 
 This setting converges at a high fitness score. Hence it is not suitable for our given problem. The reason for that is 
 that by mutating too often chromosomes, which are already similar to our given string `s` are getting changed too much. 
@@ -43,9 +43,9 @@ that by mutating too often chromosomes, which are already similar to our given s
 ![](./art/highMutation.png)
 
 ### High Population
-Population size: 500
-Limited number of population used for mating: 200
-Mutation chance : 5%
+* Population size: 500
+* Limited number of population used for mating: 200
+* Mutation chance : 5%
 
 This setting converges really fast. Actually it was almost always the best setting for this problem at any given string length.
 Having a large population of candidates obviously is advantageous. Interestingly we get nearly optimum solutions at a 
@@ -54,9 +54,9 @@ quarter of maximum number of generations.
 ![](./art/highPopulation.png)
 
 ### Low Population
-Population size: 20
-Limited number of population used for mating: 10
-Mutation chance : 5%
+* Population size: 20
+* Limited number of population used for mating: 10
+* Mutation chance : 5%
 
 As a contrast having low population count does not converge at an optimum. It gets stuck at a high fitness value and is
 not able to overcome this due to a lack of mating partners and diversity. Maximum and minimum fitness value for each 
@@ -65,9 +65,9 @@ generation are similar.
 ![](./art/lowPopulation.png)
 
 ### Super High Population
-Population size: 1000
-Limited number of population used for mating: 500
-Mutation chance : 5%
+* Population size: 1000
+* Limited number of population used for mating: 500
+* Mutation chance : 5%
 
 Since high population got us the best results, we should increase the population count once more, right? Wrong! Having 
 too much diversity leads to too many mating partners increasing the pool in terms of quantity but not quality. 
@@ -75,9 +75,9 @@ too much diversity leads to too many mating partners increasing the pool in term
 ![](./art/superHighPopulation.png)
 
 ### Zero Mutation
-Population size: 100
-Limited number of population used for mating: 60
-Mutation chance : 0.1%
+* Population size: 100
+* Limited number of population used for mating: 60
+* Mutation chance : 0.1%
 
 This setting converges but takes more time as the same setting with higher mutation. Mutation helps to outbreak local 
 minimum solutions, which are only strengthened by mating.
