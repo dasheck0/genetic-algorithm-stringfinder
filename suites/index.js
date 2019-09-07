@@ -37,7 +37,7 @@ class Suite {
 
         const suiteOptions = {
             output: suite.output,
-            verbose: options.verbose,
+            verbose: options.verbose || [],
             now: (new Date()).getTime(),
             suiteName,
             overrides: suite.overrides || {}
