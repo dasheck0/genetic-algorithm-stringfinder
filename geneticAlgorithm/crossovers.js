@@ -10,6 +10,12 @@ class Crossovers {
             return index >= crossoverIndex ? secondChromosome[index] : gene;
         }).join('');
     }
+
+    static alternating(firstChromosome, secondChromosome) {
+        return firstChromosome.split('').map((gene, index) => {
+            return index % 2 === 0 ? gene : secondChromosome[index];
+        }).join('');
+    }
 }
 
 module.exports = Crossovers;

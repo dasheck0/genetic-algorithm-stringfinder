@@ -1,0 +1,10 @@
+word: 'Hello World! Somewhat longer. Are you sure?'
+overrides:
+  generations:
+    max: 4000
+profiles:
+  - default
+  - highPopulation
+  - highPopulationAlternatingCrossover
+output:
+  - chart
