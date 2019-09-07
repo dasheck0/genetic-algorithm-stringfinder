@@ -1,0 +1,7 @@
+word: 'Hello World'
+profiles:
+  - default
+  - highPopulation
+output:
+  - json
+  - chart

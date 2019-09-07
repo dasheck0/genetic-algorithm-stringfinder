@@ -11,5 +11,9 @@ module.exports = {
             profile.mating && profile.mating.algorithm &&
             profile.crossover && profile.crossover.algorithm &&
             profile.mutation && profile.mutation.algorithm && profile.mutation.chance;
+    },
+    validateSuite: (suite) => {
+        return suite.word && suite.profiles &&
+            suite.profiles.length && suite.output && suite.output.length
     }
 };
