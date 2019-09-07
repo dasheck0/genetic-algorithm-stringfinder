@@ -1,0 +1,13 @@
+word: 'Hello World! Somewhat longer'
+overrides:
+  generations:
+    max: 2000
+profiles:
+  - default
+  - highPopulation
+  - highPopulationHighMutation
+  - highPopulationZeroMutation
+  - highPopulationSmallMutation
+  - highPopulationHigherMutation
+output:
+  - chart
