@@ -6,7 +6,7 @@
 const utilities = require('../utilities');
 
 class Mutations {
-    static singleCharacterMutation(chromosome, mutationChance, characterSet) {
+    static singleCharacter(chromosome, mutationChance, characterSet) {
         const alreadyMutated = false;
 
         return chromosome.split('').map((gene) => {

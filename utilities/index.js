@@ -16,6 +16,15 @@ class Utilities {
     static randomIndex(array) {
         return Math.round(Math.random() * (array.length - 1));
     }
+
+    static characterSet() {
+        const result = [];
+        for (let i = 32; i < 127; ++i) {
+            result.push(String.fromCharCode(i));
+        }
+
+        return result;
+    }
 }
 
 module.exports = Utilities;

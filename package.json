@@ -1,0 +1,24 @@
+{
+  "name": "genetic-algorithm-stringfinder",
+  "version": "1.0.0",
+  "description": "This is an example project for finding a predescribed string using genetic algorithm",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "genetic",
+    "algorithm",
+    "evelotuinary",
+    "algorithm",
+    "eveolution",
+    "genetics",
+    "stringfinder"
+  ],
+  "author": "Stefan Neidig <stefan@rpdev.net>",
+  "license": "ISC",
+  "dependencies": {
+    "command-line-args": "^5.1.1",
+    "yamljs": "^0.3.0"
+  }
+}

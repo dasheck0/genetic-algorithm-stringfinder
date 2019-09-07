@@ -7,30 +7,36 @@ const fs = require('fs');
 const utilities = require('../utilities');
 
 class GeneticAlgorithm {
-    static run(firstGeneration, bestPopuplationLimit, destinationWord, mutationChance, characterSet, fitnessFunction, matingFunction, crossoverFunction, mutationFunction, runLimit) {
+    static run(firstGeneration, bestPopuplationLimit, destinationWord, mutationChance, characterSet, fitnessFunction, matingFunction, crossoverFunction, mutationFunction, runLimit, verbose) {
         let currentGeneration = firstGeneration;
-        let logs = [];
+        let result = {
+            generationCount: -1,
+            lastGeneration: [],
+            generations: []
+        };
 
         for (let i = 0; i < runLimit; i += 1) {
-            logs.push(`Generation ${i} ` + currentGeneration);
-            console.log(`Generation ${i}`);
+            if (verbose.length >= 1) {
+                console.log(`Generation: ${i}`);
+            }
             const testedPopulation = GeneticAlgorithm.testPopulation(currentGeneration, destinationWord, fitnessFunction);
+            result.generations.push(testedPopulation);
 
-            logs.push('FitnessValues' + JSON.stringify(testedPopulation));
-            //console.log(logs[logs.length - 1]);
+            if (verbose.length >= 2) {
+                console.log(`Population: ${testedPopulation}`);
+            }
 
             currentGeneration = GeneticAlgorithm.mate(testedPopulation.map(p => p.chromosome), bestPopuplationLimit, matingFunction, crossoverFunction);
             currentGeneration = currentGeneration.map(chromosome => mutationFunction.call(null, chromosome, mutationChance, characterSet));
 
+            result.generationCount = i;
             if (currentGeneration.some((chromosome) => chromosome === destinationWord)) {
-                logs.push(`Found word. Took ${i} generations to find ${destinationWord}: ${currentGeneration}`);
-                console.log(logs[logs.length - 1]);
+                result.lastGeneration = currentGeneration;
                 break;
             }
         }
 
-        console.log(`Last Generation ` + currentGeneration);
-        fs.writeFileSync('logs.txt', logs.join('\n'));
+        return result;
     }
 
     static generatePopulation(populationSize, destinationWordLength, characterSet) {

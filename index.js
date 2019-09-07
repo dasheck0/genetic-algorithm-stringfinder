@@ -3,19 +3,70 @@
  * Copyright © 2019 appcom interactive GmbH. All rights reserved.
  */
 
+const YAML = require('yamljs');
+const commandLineArgs = require('command-line-args');
+const fs = require('fs');
+const path = require('path');
+
+const { validateProfile } = require('./validation');
+
 const geneticAlgorithm = require('./geneticAlgorithm');
 const fitnessFunctions = require('./geneticAlgorithm/fitness');
 const crossoverFunctions = require('./geneticAlgorithm/crossovers');
 const matingFunctions = require('./geneticAlgorithm/matings');
 const mutationFunctions = require('./geneticAlgorithm/mutations');
+const utilities = require('./utilities');
 
-const destinationWord = 'Testing it now? Alright! Dann ist ja gut';
-const characterSet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!? ';
-const populationSize = 250;
-const bestPopulationLimit = 80;
-const mutationChance = 0.05;
-const runLimit = 20000;
+const optionDefinitions = [
+    { name: 'profile', alias: 'p', type: String },
+    { name: 'word', alias: 'w', type: String, defaultOption: true },
+    { name: 'verbose', alias: 'v', type: Boolean, lazyMultiple: true }
+];
+const options = commandLineArgs(optionDefinitions);
 
-const gen0 = geneticAlgorithm.generatePopulation(populationSize, destinationWord.length, characterSet);
-geneticAlgorithm.run(gen0, bestPopulationLimit, destinationWord, mutationChance, characterSet, fitnessFunctions.sumDifference, matingFunctions.randomPick, crossoverFunctions.singlePointMiddleCrossover, mutationFunctions.singleCharacterMutation, runLimit);
+if (!options.word) {
+    console.error('There is no word to search for');
+    process.exit(1);
+}
 
+const profileName = options.profile || 'default';
+const profileFileName = path.join(process.cwd(), 'profiles', `${profileName}.yml`);
+
+if (!fs.existsSync(profileFileName)) {
+    console.error(`Could not find profile ${profileFileName}`);
+    process.exit(1);
+}
+
+const profile = YAML.load(profileFileName);
+if (!validateProfile(profile)) {
+    console.error(`Profile ${profileName} is invalid`);
+    process.exit(1);
+}
+
+const findStaticFunction = (object, functionName) => {
+    const functionObject = object[functionName];
+
+    if (!functionObject) {
+        console.error(`Could not find function ${functionName} in ${object.name}`);
+        process.exit(1);
+    }
+
+    return functionObject;
+};
+
+const generation0 = geneticAlgorithm.generatePopulation(profile.population.size, options.word.length, utilities.characterSet());
+const result = geneticAlgorithm.run(
+    generation0,
+    profile.population.limit,
+    options.word,
+    profile.mutation.chance,
+    utilities.characterSet(),
+    findStaticFunction(fitnessFunctions, profile.fitness.algorithm),
+    findStaticFunction(matingFunctions, profile.mating.algorithm),
+    findStaticFunction(crossoverFunctions, profile.crossover.algorithm),
+    findStaticFunction(mutationFunctions, profile.mutation.algorithm),
+    profile.generations.max,
+    options.verbose.filter(entry => !!entry)
+);
+
+fs.writeFileSync('logs.json', JSON.stringify(result, null, 2));

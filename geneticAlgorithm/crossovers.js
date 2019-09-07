@@ -4,7 +4,7 @@
  */
 
 class Crossovers {
-    static singlePointMiddleCrossover(firstChromosome, secondChromosome) {
+    static singlePointMiddle(firstChromosome, secondChromosome) {
         const crossoverIndex = Math.trunc(firstChromosome.length / 2);
         return firstChromosome.split('').map((gene, index) => {
             return index >= crossoverIndex ? secondChromosome[index] : gene;
