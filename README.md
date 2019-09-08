@@ -94,7 +94,7 @@ too much diversity leads to too many mating partners increasing the pool in term
 This setting converges but takes more time as the same setting with higher mutation. Mutation helps to outbreak local 
 minimum solutions, which are only strengthened by mating.
 
-![](./art/highPopulation.png)
+![](./art/zeroMutation.png)
 
 ## Run it your self
 You can run this your self. There are a set of profiles and a suite in this repository.
